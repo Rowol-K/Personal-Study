@@ -1,42 +1,42 @@
-//=================================================================< ºñ°í >===============================================================================
+//=================================================================< ë¹„ê³  >===============================================================================
 /*
-ÇÁ·Î±×·¥ ¸í		: ¼ıÀÚ ¾ß±¸
-¸¸µç »ç¶÷		: ±èÅÂÀ±
-ÃÖÁ¾ ¼öÁ¤ÀÏ		: 2022 - 09 - 20
+í”„ë¡œê·¸ë¨ ëª…		: ìˆ«ì ì•¼êµ¬
+ë§Œë“  ì‚¬ëŒ		: Rowol-K
+ìµœì¢… ìˆ˜ì •ì¼		: 2022 - 09 - 20
 
-ºñ°í  :
-	ÀÌ ÇÁ·Î±×·¥Àº Microsoft Visual Studio 2017À» ±â¹İÀ¸·Î ÄÚµù µÇ¾ú½À´Ï´Ù.
+ë¹„ê³   :
+	ì´ í”„ë¡œê·¸ë¨ì€ Microsoft Visual Studio 2017ì„ ê¸°ë°˜ìœ¼ë¡œ ì½”ë”© ë˜ì—ˆìŠµë‹ˆë‹¤.
 	This program is cording based on Microsoft Visual Studio 2017.
 
-ÃâÃ³ :	X  (¼ö¾÷ ½Ã°£¿¡ ¹è¿î ¹®¹ıµé¸¸ »ç¿ëÇÏ¿© ±¸ÇöÇÏ¿´½À´Ï´Ù. ¶ÇÇÑ ÀÏºÎ ³»¿ëÀº ÀÎÅÍ³İÀÇ ¿©·¯ ¿¹Á¦µéÀÇ ¾Ë°í¸®ÁòÀ» ÅëÇÕÇÏ¿© »õ·Î ¸¸µé¾ú½À´Ï´Ù.)
+ì¶œì²˜ :	X  (ìˆ˜ì—… ì‹œê°„ì— ë°°ìš´ ë¬¸ë²•ë“¤ë§Œ ì‚¬ìš©í•˜ì—¬ êµ¬í˜„í•˜ì˜€ìŠµë‹ˆë‹¤. ë˜í•œ ì¼ë¶€ ë‚´ìš©ì€ ì¸í„°ë„·ì˜ ì—¬ëŸ¬ ì˜ˆì œë“¤ì˜ ì•Œê³ ë¦¬ì¦˜ì„ í†µí•©í•˜ì—¬ ìƒˆë¡œ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤.)
 */
 //========================================================================================================================================================
 
 
 
-// Çì´õ Á¢¼Ó
+// í—¤ë” ì ‘ì†
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
 #include<conio.h>
 #include<string.h>
 #include<Windows.h>
-//---------------------------------------------Àü¿ªº¯¼ö---------------------------------------------------------
+//---------------------------------------------ì „ì—­ë³€ìˆ˜---------------------------------------------------------
 
-int Max_Console_Width = 80, Max_Console_Height = 25;  //ÄÜ¼Ö »çÀÌÁî Á¶Á¤
-int i, j;	//¹İº¹¹® ·çÇÁ Á¦¾î
-int x, y;	//ÁÂÇ¥ Á¢±Ù º¯¼ö
-int idx = 0;	//ÀÎµ¦½º Á¢±Ù º¯¼ö (idx)
-int game_switch, reset;  //¸Ş´º Á¦¾î ½ºÀ§Ä¡
+int Max_Console_Width = 80, Max_Console_Height = 25;  //ì½˜ì†” ì‚¬ì´ì¦ˆ ì¡°ì •
+int i, j;	//ë°˜ë³µë¬¸ ë£¨í”„ ì œì–´
+int x, y;	//ì¢Œí‘œ ì ‘ê·¼ ë³€ìˆ˜
+int idx = 0;	//ì¸ë±ìŠ¤ ì ‘ê·¼ ë³€ìˆ˜ (idx)
+int game_switch, reset;  //ë©”ë‰´ ì œì–´ ìŠ¤ìœ„ì¹˜
 
 
-int level;	//°ÔÀÓ ³­ÀÌµµ (ÀÚ¸´¼ö)
-char Com_number[5] = { 0 };	//Á¤´ä ¼ıÀÚ
-char no_overlap[10] = { 0 };	//Áßº¹Á¦°Å
-char User_number[30][5] = { 0 };	// [n ¹øÂ°] [»ç¿ëÀÚ ¼ıÀÚ]
-int get_num = 0;		//ÀÔ·Â
+int level;	//ê²Œì„ ë‚œì´ë„ (ìë¦¿ìˆ˜)
+char Com_number[5] = { 0 };	//ì •ë‹µ ìˆ«ì
+char no_overlap[10] = { 0 };	//ì¤‘ë³µì œê±°
+char User_number[30][5] = { 0 };	// [n ë²ˆì§¸] [ì‚¬ìš©ì ìˆ«ì]
+int get_num = 0;		//ì…ë ¥
 
-//ÀÔ·Â ·Î±× ( [Âù½º], [Number, S, B, O] )
+//ì…ë ¥ ë¡œê·¸ ( [ì°¬ìŠ¤], [Number, S, B, O] )
 int game_log[15][4] = { 0 };
 int turn_log = 0;
 int Number_log = 0;
@@ -44,31 +44,31 @@ int S_log = 0;
 int B_log = 0;
 int O_log = 0;
 
-int score = 0;						//Á¡¼ö º¯¼ö
-int highest_score[3] = { 0 };		//ÃÖ°í Á¡¼ö (0 - ½¬¿ò / 1 - º¸Åë / 2 - ¾î·Á¿ò)
+int score = 0;						//ì ìˆ˜ ë³€ìˆ˜
+int highest_score[3] = { 0 };		//ìµœê³  ì ìˆ˜ (0 - ì‰¬ì›€ / 1 - ë³´í†µ / 2 - ì–´ë ¤ì›€)
 
 
-int Strike = 0, Ball = 0, Out = 0;  //½ºÆ®¶óÀÌÅ©, º¼, ¾Æ¿ô
-int chance, turn;	// ³²Àº ±âÈ¸, ÁøÇà ÅÏ¼ö
-int game_count[50];		//°á°úÃ¢ ÅÏ Ç¥½Ã
-int result_pos = 6;		//°á°úÃ¢ Ãâ·Â À§Ä¡
+int Strike = 0, Ball = 0, Out = 0;  //ìŠ¤íŠ¸ë¼ì´í¬, ë³¼, ì•„ì›ƒ
+int chance, turn;	// ë‚¨ì€ ê¸°íšŒ, ì§„í–‰ í„´ìˆ˜
+int game_count[50];		//ê²°ê³¼ì°½ í„´ í‘œì‹œ
+int result_pos = 6;		//ê²°ê³¼ì°½ ì¶œë ¥ ìœ„ì¹˜
 
-//------------------------------------------------Àü¿ªº¯¼ö----------------------------------------------------
-
-
-
+//------------------------------------------------ì „ì—­ë³€ìˆ˜----------------------------------------------------
 
 
 
-//Ä¿¼­ ÁÂÇ¥ ÀÌµ¿	¡Ü
+
+
+
+//ì»¤ì„œ ì¢Œí‘œ ì´ë™	â—
 void gotoxy(int x, int y)
 {
 	COORD Pos = { x - 1, y - 1 };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
 
-//½ºÅ©¸° ±¸°£ Å¬¸®¾î
-void cls_area(int x, int y, int a, int b) { //        (x,y => ½ÃÀÛ ÁÂÇ¥ / a,b => Á¾·á ÁÂÇ¥)
+//ìŠ¤í¬ë¦° êµ¬ê°„ í´ë¦¬ì–´
+void cls_area(int x, int y, int a, int b) { //        (x,y => ì‹œì‘ ì¢Œí‘œ / a,b => ì¢…ë£Œ ì¢Œí‘œ)
 	int i, j;
 	gotoxy(x, y);
 	for (i = 0; i < (b - y); i++) {
@@ -77,48 +77,48 @@ void cls_area(int x, int y, int a, int b) { //        (x,y => ½ÃÀÛ ÁÂÇ¥ / a,b =>
 			printf(" ");
 		}
 	}
-	// a - x : Å¬¸®¾î ±¸°£ x ±æÀÌ
-	// b - y : Å¬¸®¾î ±¸°£ y ±æÀÌ
+	// a - x : í´ë¦¬ì–´ êµ¬ê°„ x ê¸¸ì´
+	// b - y : í´ë¦¬ì–´ êµ¬ê°„ y ê¸¸ì´
 }
 
-// ( Int --> Char ) º¯È¯ ÇÔ¼ö
+// ( Int --> Char ) ë³€í™˜ í•¨ìˆ˜
 char Int_to_Char(int x) {
 	return x + '0';
 }
 
-//°ÔÀÓ ¸ŞÀÎÈ­¸é    ¡Ü    ¸ŞÀÎÈ­¸é, ¸Ş´º¼±ÅÃ
+//ê²Œì„ ë©”ì¸í™”ë©´    â—    ë©”ì¸í™”ë©´, ë©”ë‰´ì„ íƒ
 int Title() {
-	//¸Ş´º µğÀÚÀÎ
+	//ë©”ë‰´ ë””ìì¸
 	gotoxy(31, 5);
-	printf("¡Ü¡Û-¼ıÀÚ ¾ß±¸-¡Û¡Ü");
+	printf("â—â—‹-ìˆ«ì ì•¼êµ¬-â—‹â—");
 	gotoxy(33, 6);
 	printf("--Select Menu--");
 
-	//¸Ş´º ¸®½ºÆ®
+	//ë©”ë‰´ ë¦¬ìŠ¤íŠ¸
 	for (j = 0; j < 5; j++) {
 		gotoxy(32, j + 7);
 		switch (j) {
 		case 0:
-			printf("1. °ÔÀÓ ½ÃÀÛ");
+			printf("1. ê²Œì„ ì‹œì‘");
 			break;
 		case 1:
-			printf("2. °ÔÀÓ ¹æ¹ı");
+			printf("2. ê²Œì„ ë°©ë²•");
 			break;
 		case 2:
-			printf("3. ÃÖ°í Á¡¼ö È®ÀÎ");
+			printf("3. ìµœê³  ì ìˆ˜ í™•ì¸");
 			break;
 		case 3:
-			printf("4. °ÔÀÓ Á¾·á");
+			printf("4. ê²Œì„ ì¢…ë£Œ");
 			break;
 		case 4:
 			printf("================");
 			gotoxy(32, 12);
-			printf("¸Ş´º ¼±ÅÃ : ");
+			printf("ë©”ë‰´ ì„ íƒ : ");
 			break;
 		}
 	}
 
-	//¸Ş´º ÀÔ·Â
+	//ë©”ë‰´ ì…ë ¥
 	game_switch = _getch();
 	game_switch = game_switch - '0';
 	//scanf_s("%d", &game_switch);
@@ -126,44 +126,44 @@ int Title() {
 	return game_switch;
 }
 
-//°ÔÀÓ ¼³¸í    ¡Ü
+//ê²Œì„ ì„¤ëª…    â—
 void Game_Explain() {
-	int s = 0; //¹®ÀÚ¿­ ÀĞ¾î¿À±â º¯¼ö
-	int e = 8, h = 40, y = 4; //Ãâ·Â¹® À§Ä¡ Á¦¾î
+	int s = 0; //ë¬¸ìì—´ ì½ì–´ì˜¤ê¸° ë³€ìˆ˜
+	int e = 8, h = 40, y = 4; //ì¶œë ¥ë¬¸ ìœ„ì¹˜ ì œì–´
 
-	//°³¿ä
-	char Explain_summary_0[60] = "¼ıÀÚ ¾ß±¸´Â Á¤ÇØÁø ¼ıÀÚ¸¦ º¼°ú ¾Æ¿ô, ½ºÆ®¶óÀÌÅ©¸¦ ÅëÇÏ¿© Á¤";
-	char Explain_summary_1[60] = "ÇØÁø ±âÈ¸ ¾È¿¡ ¸ÂÃß´Â Ãß¸® °ÔÀÓÀÔ´Ï´Ù. »ç¿ëÀÚ´Â ÀÚ½ÅÀÌ °ÔÀÓ";
-	char Explain_summary_2[60] = "ÇÒ °ÔÀÓÀÇ ÆÇ ¼ö¿Í ÀÚ¸´¼ö¸¦ ÁöÁ¤ÇÒ ¼ö ÀÖÀ¸¸ç, ÁöÁ¤µÈ ÀÚ¸® ¼ö";
-	char Explain_summary_3[60] = "¿¡ µû¶ó ¸ÂÃâ ¼ö ÀÖ´Â ±âÈ¸°¡ ´Ù¸£°Ô ÁÖ¾îÁı´Ï´Ù.ÁÖ¾îÁø ±âÈ¸";
-	char Explain_summary_4[60] = "¾È¿¡¼­ º¼°ú ¾Æ¿ô, ½ºÆ®¶óÀÌÅ©¸¦ ÀÌ¿ëÇÏ¿© Ãß¸®ÇÏ°í, ÁöÁ¤µÈ";
-	char Explain_summary_5[60] = "¼ıÀÚ¸¦ ¸ÂÃß¸é ½Â¸®ÇÏ°Ô µË´Ï´Ù.";
+	//ê°œìš”
+	char Explain_summary_0[60] = "ìˆ«ì ì•¼êµ¬ëŠ” ì •í•´ì§„ ìˆ«ìë¥¼ ë³¼ê³¼ ì•„ì›ƒ, ìŠ¤íŠ¸ë¼ì´í¬ë¥¼ í†µí•˜ì—¬ ì •";
+	char Explain_summary_1[60] = "í•´ì§„ ê¸°íšŒ ì•ˆì— ë§ì¶”ëŠ” ì¶”ë¦¬ ê²Œì„ì…ë‹ˆë‹¤. ì‚¬ìš©ìëŠ” ìì‹ ì´ ê²Œì„";
+	char Explain_summary_2[60] = "í•  ê²Œì„ì˜ íŒ ìˆ˜ì™€ ìë¦¿ìˆ˜ë¥¼ ì§€ì •í•  ìˆ˜ ìˆìœ¼ë©°, ì§€ì •ëœ ìë¦¬ ìˆ˜";
+	char Explain_summary_3[60] = "ì— ë”°ë¼ ë§ì¶œ ìˆ˜ ìˆëŠ” ê¸°íšŒê°€ ë‹¤ë¥´ê²Œ ì£¼ì–´ì§‘ë‹ˆë‹¤.ì£¼ì–´ì§„ ê¸°íšŒ";
+	char Explain_summary_4[60] = "ì•ˆì—ì„œ ë³¼ê³¼ ì•„ì›ƒ, ìŠ¤íŠ¸ë¼ì´í¬ë¥¼ ì´ìš©í•˜ì—¬ ì¶”ë¦¬í•˜ê³ , ì§€ì •ëœ";
+	char Explain_summary_5[60] = "ìˆ«ìë¥¼ ë§ì¶”ë©´ ìŠ¹ë¦¬í•˜ê²Œ ë©ë‹ˆë‹¤.";
 
-	//°ÔÀÓ ¹æ¹ı
-	char Explain_way_0[60] = "¸Ş´º¸¦ ÅëÇÏ¿© ¹®Á¦ÀÇ ÃÑ ÀÚ¸´¼ö¸¦ ÀÔ·Â ¹ŞÀ¸¸é, °¢°¢ÀÇ ÀÚ¸´¼ö";
-	char Explain_way_1[60] = "¿¡ ´ëÇØ ¼ıÀÚ¸¦ ÀÔ·ÂÇÒ ¼ö ÀÖ°Ô µË´Ï´Ù. ÀÔ·ÂÇÑ ¼ıÀÚ°¡ ¸ğµç";
-	char Explain_way_2[60] = "Á¤´ä ¼ıÀÚ¿Í ¸ÂÁö ¾ÊÀ» °æ¿ì´Â \"¾Æ¿ô\"À¸·Î ³ªÅ¸³À´Ï´Ù. ÀÔ·ÂÇÑ";
-	char Explain_way_3[60] = "¼ıÀÚ¿Í Á¤´ä ¼ıÀÚÀÇ ¼ıÀÚ´Â °°À¸³ª, ÀÚ¸´¼ö°¡ °°Áö ¾ÊÀº °æ¿ì´Â";
-	char Explain_way_4[60] = "\"º¼\"·Î ³ªÅ¸³À´Ï´Ù. ÀÔ·ÂÇÑ ¼ıÀÚ°¡ Á¤´ä ¼ıÀÚÀÇ ¼ıÀÚ¿Í ÀÚ¸´¼ö";
-	char Explain_way_5[60] = "¸ğµÎ µ¿ÀÏÇÏ¸é \"½ºÆ®¶óÀÌÅ©\"ÀÔ´Ï´Ù.";
+	//ê²Œì„ ë°©ë²•
+	char Explain_way_0[60] = "ë©”ë‰´ë¥¼ í†µí•˜ì—¬ ë¬¸ì œì˜ ì´ ìë¦¿ìˆ˜ë¥¼ ì…ë ¥ ë°›ìœ¼ë©´, ê°ê°ì˜ ìë¦¿ìˆ˜";
+	char Explain_way_1[60] = "ì— ëŒ€í•´ ìˆ«ìë¥¼ ì…ë ¥í•  ìˆ˜ ìˆê²Œ ë©ë‹ˆë‹¤. ì…ë ¥í•œ ìˆ«ìê°€ ëª¨ë“ ";
+	char Explain_way_2[60] = "ì •ë‹µ ìˆ«ìì™€ ë§ì§€ ì•Šì„ ê²½ìš°ëŠ” \"ì•„ì›ƒ\"ìœ¼ë¡œ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤. ì…ë ¥í•œ";
+	char Explain_way_3[60] = "ìˆ«ìì™€ ì •ë‹µ ìˆ«ìì˜ ìˆ«ìëŠ” ê°™ìœ¼ë‚˜, ìë¦¿ìˆ˜ê°€ ê°™ì§€ ì•Šì€ ê²½ìš°ëŠ”";
+	char Explain_way_4[60] = "\"ë³¼\"ë¡œ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤. ì…ë ¥í•œ ìˆ«ìê°€ ì •ë‹µ ìˆ«ìì˜ ìˆ«ìì™€ ìë¦¿ìˆ˜";
+	char Explain_way_5[60] = "ëª¨ë‘ ë™ì¼í•˜ë©´ \"ìŠ¤íŠ¸ë¼ì´í¬\"ì…ë‹ˆë‹¤.";
 
-	//Á¡¼ö °è»ê
-	char Explain_score_0[60] = "¼ıÀÚ ¾ß±¸´Â Ãß¸® ±â¹İÀÇ °ÔÀÓÀ¸·Î, ºü¸£°í Á¤È®ÇÏ°Ô ´äÀ» Ã£´Â";
-	char Explain_score_1[60] = "°ÍÀÌ Áß¿äÇÕ´Ï´Ù. ¾Æ¿ôÀº 0Á¡ ÀÌ¸ç, \"º¼\"ÀÇ °¹¼ö¸¶´Ù 50Á¡, \"½º";
-	char Explain_score_2[60] = "Æ®¶óÀÌÅ©\"´Â 100Á¡À¸·Î °è»êµË´Ï´Ù. Á¤ÇØÁø È½¼öº¸´Ù ÀÌ¸£°Ô";
-	char Explain_score_3[60] = "¸ÂÃèÀ» °æ¿ì º¸³Ê½º°¡ Àû¿ë, ³²Àº È½¼ö¸¦ °öÇÏ¿© °è»êÇÕ´Ï´Ù.";
-	char Explain_score_4[60] = "¸¸¾à, Á¤´äÀ» ¸ÂÃá ÈÄ, ³²Àº ±âÈ¸°¡ 0¹ø ÀÌ¶ó¸é º¸³Ê½º´Â";
-	char Explain_score_5[60] = "Àû¿ëµÇÁö ¾ÊÀ¸¸ç º¼°ú ½ºÆ®¶óÀÌÅ©ÀÇ ÇÕÀ¸·Î¸¸ °è»êµË´Ï´Ù.";
+	//ì ìˆ˜ ê³„ì‚°
+	char Explain_score_0[60] = "ìˆ«ì ì•¼êµ¬ëŠ” ì¶”ë¦¬ ê¸°ë°˜ì˜ ê²Œì„ìœ¼ë¡œ, ë¹ ë¥´ê³  ì •í™•í•˜ê²Œ ë‹µì„ ì°¾ëŠ”";
+	char Explain_score_1[60] = "ê²ƒì´ ì¤‘ìš”í•©ë‹ˆë‹¤. ì•„ì›ƒì€ 0ì  ì´ë©°, \"ë³¼\"ì˜ ê°¯ìˆ˜ë§ˆë‹¤ 50ì , \"ìŠ¤";
+	char Explain_score_2[60] = "íŠ¸ë¼ì´í¬\"ëŠ” 100ì ìœ¼ë¡œ ê³„ì‚°ë©ë‹ˆë‹¤. ì •í•´ì§„ íšŸìˆ˜ë³´ë‹¤ ì´ë¥´ê²Œ";
+	char Explain_score_3[60] = "ë§ì·„ì„ ê²½ìš° ë³´ë„ˆìŠ¤ê°€ ì ìš©, ë‚¨ì€ íšŸìˆ˜ë¥¼ ê³±í•˜ì—¬ ê³„ì‚°í•©ë‹ˆë‹¤.";
+	char Explain_score_4[60] = "ë§Œì•½, ì •ë‹µì„ ë§ì¶˜ í›„, ë‚¨ì€ ê¸°íšŒê°€ 0ë²ˆ ì´ë¼ë©´ ë³´ë„ˆìŠ¤ëŠ”";
+	char Explain_score_5[60] = "ì ìš©ë˜ì§€ ì•Šìœ¼ë©° ë³¼ê³¼ ìŠ¤íŠ¸ë¼ì´í¬ì˜ í•©ìœ¼ë¡œë§Œ ê³„ì‚°ë©ë‹ˆë‹¤.";
 
 
-	//¼³¸í Ãâ·Â
+	//ì„¤ëª… ì¶œë ¥
 	for (i = 0; i < 3; i++) {
 		switch (i) {
-		case 0: // °³¿ä
+		case 0: // ê°œìš”
 			gotoxy(h - 2, y - 2);
 			printf("1/3");
 			gotoxy(h - 7, y - 1);
-			printf("--°ÔÀÓ °³¿ä--\n");
+			printf("--ê²Œì„ ê°œìš”--\n");
 
 			//Explain_summary
 			for (i = 0; i < 6; i++) {
@@ -218,11 +218,11 @@ void Game_Explain() {
 			y = 4;
 			system("cls");
 
-		case 1: // °ÔÀÓ ¹æ¹ı
+		case 1: // ê²Œì„ ë°©ë²•
 			gotoxy(h - 2, y - 2);
 			printf("2/3");
 			gotoxy(h - 7, y - 1);
-			printf("--°ÔÀÓ ¹æ¹ı--\n");
+			printf("--ê²Œì„ ë°©ë²•--\n");
 
 			//Explain_way
 			for (i = 0; i < 6; i++) {
@@ -277,11 +277,11 @@ void Game_Explain() {
 			y = 4;
 			system("cls");
 
-		case 2: // Á¡¼ö °è»ê
+		case 2: // ì ìˆ˜ ê³„ì‚°
 			gotoxy(h - 2, y - 2);
 			printf("3/3");
 			gotoxy(h - 7, y - 1);
-			printf("--Á¡¼ö °è»ê--\n");
+			printf("--ì ìˆ˜ ê³„ì‚°--\n");
 
 			//Explain_score
 			for (i = 0; i < 6; i++) {
@@ -339,36 +339,36 @@ void Game_Explain() {
 	}
 }
 
-//¼ıÀÚ ¾ß±¸ ·¹º§ ¼±ÅÃ    ¡Ü   1 - ½¬¿ò[3] / 2 - º¸Åë[4] / 3 - ¾î·Á¿ò[5] 
+//ìˆ«ì ì•¼êµ¬ ë ˆë²¨ ì„ íƒ    â—   1 - ì‰¬ì›€[3] / 2 - ë³´í†µ[4] / 3 - ì–´ë ¤ì›€[5] 
 int Select_Level() {
 	gotoxy(31, 5);
-	printf("¡Ü¡Û-¼ıÀÚ ¾ß±¸-¡Û¡Ü");
+	printf("â—â—‹-ìˆ«ì ì•¼êµ¬-â—‹â—");
 	gotoxy(32, 6);
 	printf("--Select Level--");
 
-	//·¹º§ º¸±â
+	//ë ˆë²¨ ë³´ê¸°
 	for (j = 0; j < 4; j++) {
 		gotoxy(31, j + 7);
 		switch (j) {
 		case 0:
-			printf("[1]  ½¬¿ò - 3ÀÚ¸®");
+			printf("[1]  ì‰¬ì›€ - 3ìë¦¬");
 			break;
 		case 1:
-			printf("[2]  º¸Åë - 4ÀÚ¸®");
+			printf("[2]  ë³´í†µ - 4ìë¦¬");
 			break;
 		case 2:
-			printf("[3] ¾î·Á¿ò - 5ÀÚ¸®");
+			printf("[3] ì–´ë ¤ì›€ - 5ìë¦¬");
 			break;
 		case 3:
 			gotoxy(31, j + 7);
 			printf("==================");
 			gotoxy(31, j + 8);
-			printf("¸Ş´º ¼±ÅÃ : ");
+			printf("ë©”ë‰´ ì„ íƒ : ");
 			break;
 		}
 	}
 
-	//·¹º§ ÀÔ·Â
+	//ë ˆë²¨ ì…ë ¥
 	game_switch = _getch();
 	game_switch = game_switch - '0';
 	//scanf_s("%d", &game_switch);
@@ -376,7 +376,7 @@ int Select_Level() {
 	return game_switch;
 }
 
-//¼ıÀÚ ÀÔ·Â ¹Ş±â		¡Ü  
+//ìˆ«ì ì…ë ¥ ë°›ê¸°		â—  
 int Get_user_number(int x_pos, int y_pos) {
 	int Input;
 	gotoxy(x_pos, y_pos);
@@ -384,14 +384,14 @@ int Get_user_number(int x_pos, int y_pos) {
 	return Input;
 }
 
-//¹è¿­¿¡ ¼ıÀÚ ÀÔ·Â		¡Ü
+//ë°°ì—´ì— ìˆ«ì ì…ë ¥		â—
 void Input_user_number(int level, int input) {
 	int mil, tsnd, hun, ten, one;
 
 
 	switch (level)
 	{
-	case 1: //3ÀÚ¸®
+	case 1: //3ìë¦¬
 		hun = input / 100;
 		input = input - (hun * 100);
 		ten = input / 10;
@@ -403,8 +403,8 @@ void Input_user_number(int level, int input) {
 		User_number[turn_log][2] = Int_to_Char(one);
 
 		break;
-	case 2: //4ÀÚ¸®
-		//ÀÚ¸´¼öº° ¼ıÀÚ
+	case 2: //4ìë¦¬
+		//ìë¦¿ìˆ˜ë³„ ìˆ«ì
 		tsnd = input / 1000;
 		input = input - (tsnd * 1000);
 		hun = input / 100;
@@ -413,7 +413,7 @@ void Input_user_number(int level, int input) {
 		input = input - (ten * 10);
 		one = input;
 
-		//¹®ÀÚÇü ÀúÀå
+		//ë¬¸ìí˜• ì €ì¥
 		User_number[turn_log][0] = Int_to_Char(tsnd);
 		User_number[turn_log][1] = Int_to_Char(hun);
 		User_number[turn_log][2] = Int_to_Char(ten);
@@ -421,7 +421,7 @@ void Input_user_number(int level, int input) {
 
 		break;
 
-	case 3: //5ÀÚ¸®
+	case 3: //5ìë¦¬
 		mil = input / 10000;
 		input = input - (mil * 10000);
 		tsnd = input / 1000;
@@ -442,7 +442,7 @@ void Input_user_number(int level, int input) {
 	}
 }
 
-//ÀÔ·Â¼ıÀÚÀÇ Á¤´äÆ÷ÇÔ¿©ºÎ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+//ì…ë ¥ìˆ«ìì˜ ì •ë‹µí¬í•¨ì—¬ë¶€ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 int Int_in_list(char x) {
 	int i;
 	char list[5] = { 0 };
@@ -460,23 +460,23 @@ int Int_in_list(char x) {
 	return FALSE;
 }
 
-//°ÔÀÓ ÁøÇà »óÈ²	¡Ü
+//ê²Œì„ ì§„í–‰ ìƒí™©	â—
 void Score_board() {
 	gotoxy(0, 0);
-	printf("----°ÔÀÓ »óÈ²---- \n");
-	printf("ÇöÀç ÅÏ   : %d ÅÏ\n", turn);
-	printf("³²Àº È½¼ö : %d ¹ø\n", chance);
-	printf("ÇöÀç Á¡¼ö : %d Á¡\n", score);
-	printf("ÃÖ°í Á¡¼ö : %d Á¡\n", highest_score[game_switch - 1]);
+	printf("----ê²Œì„ ìƒí™©---- \n");
+	printf("í˜„ì¬ í„´   : %d í„´\n", turn);
+	printf("ë‚¨ì€ íšŸìˆ˜ : %d ë²ˆ\n", chance);
+	printf("í˜„ì¬ ì ìˆ˜ : %d ì \n", score);
+	printf("ìµœê³  ì ìˆ˜ : %d ì \n", highest_score[game_switch - 1]);
 	printf("=================\n");
-	// (0,6) ¾Æ·¡·Î´Â °ÔÀÓ »óÈ²À» Ç¥½Ã.
+	// (0,6) ì•„ë˜ë¡œëŠ” ê²Œì„ ìƒí™©ì„ í‘œì‹œ.
 
 }
 
-//°á°ú ¶ç¿ì±â		¡Ü
+//ê²°ê³¼ ë„ìš°ê¸°		â—
 void Result(int turn, int S, int B, int O) {
 
-	printf("[ %d ÅÏ ] \n", game_count[turn_log] + 1);
+	printf("[ %d í„´ ] \n", game_count[turn_log] + 1);
 
 	for (i = 0; i < level; i++)
 		printf("%c", User_number[turn_log][i]);
@@ -484,7 +484,7 @@ void Result(int turn, int S, int B, int O) {
 
 }
 
-//Á¤´ä ÆÇº°		¡Ü
+//ì •ë‹µ íŒë³„		â—
 int Check_Correct() {
 	if (Strike == level) {
 		return TRUE;
@@ -501,7 +501,7 @@ int Check_Correct() {
 		return FALSE;
 }
 
-//Á¡¼ö º¸³Ê½º		¡Ü
+//ì ìˆ˜ ë³´ë„ˆìŠ¤		â—
 int Bonus_score(int now_score, int left_chance) {
 	if (left_chance <= 1)
 		return now_score;
@@ -512,9 +512,9 @@ int Bonus_score(int now_score, int left_chance) {
 }
 
 
-//°ÔÀÓ ¸®¼Â		¡Ü
+//ê²Œì„ ë¦¬ì…‹		â—
 void Reset() {
-	//ÄÄÇ»ÅÍÀÇ Á¤´ä ¼ıÀÚ¿Í À¯ÀúÀÇ Á¤´ä ¼ıÀÚ ÃÊ±âÈ­
+	//ì»´í“¨í„°ì˜ ì •ë‹µ ìˆ«ìì™€ ìœ ì €ì˜ ì •ë‹µ ìˆ«ì ì´ˆê¸°í™”
 	for (i = 0; i < 5; i++)
 		Com_number[i] = 0;
 
@@ -524,7 +524,7 @@ void Reset() {
 		}
 	}
 
-	//À¯ÀúÀÇ ÀÔ·Â ¼ıÀÚ ·Î±× ÃÊ±âÈ­
+	//ìœ ì €ì˜ ì…ë ¥ ìˆ«ì ë¡œê·¸ ì´ˆê¸°í™”
 	for (i = 0; i < 15; i++) {
 		for (j = 0; j < 4; j++) {
 			game_log[i][j] = 0;
@@ -537,53 +537,53 @@ void Reset() {
 	O_log = 0;
 	get_num = 0;
 
-	//Áßº¹ Á¦°Å ÃÊ±âÈ­
+	//ì¤‘ë³µ ì œê±° ì´ˆê¸°í™”
 	for (i = 0; i < 10; i++)
 		no_overlap[i] = 0;
 
-	//ÀÎµ¦½º Á¢±Ù ÃÊ±âÈ­
+	//ì¸ë±ìŠ¤ ì ‘ê·¼ ì´ˆê¸°í™”
 	idx = 0;
 
-	//·¹º§, Âù½º, ÅÏ ÃÊ±âÈ­
+	//ë ˆë²¨, ì°¬ìŠ¤, í„´ ì´ˆê¸°í™”
 	level = 0;
 	chance = 0;
 	turn = 1;
 
-	// S, B, O ÃÊ±âÈ­
+	// S, B, O ì´ˆê¸°í™”
 	Strike = 0;
 	Ball = 0;
 	Out = 0;
 
-	//°á°ú Ã¢ Ãâ·ÂÁ¦¾î º¯¼ö ÃÊ±âÈ­
-		//°ÔÀÓ ÅÏ¼ö Ç¥½Ã
+	//ê²°ê³¼ ì°½ ì¶œë ¥ì œì–´ ë³€ìˆ˜ ì´ˆê¸°í™”
+		//ê²Œì„ í„´ìˆ˜ í‘œì‹œ
 	for (i = 0; i < 50; i++) {
 		game_count[i] = i;
 	}
-	//Ãâ·Â À§Ä¡ Ç¥½Ã
+	//ì¶œë ¥ ìœ„ì¹˜ í‘œì‹œ
 	result_pos = 6;
 
-	//Á¡¼ö ÃÊ±âÈ­
+	//ì ìˆ˜ ì´ˆê¸°í™”
 	score = 0;
 
 
 }
 
-//ÃÖ°íÁ¡¼ö ¸®¼Â		¡Ü
+//ìµœê³ ì ìˆ˜ ë¦¬ì…‹		â—
 void Highest_Score_Reset() {
 	system("cls");
 
 	gotoxy(27, 7);
-	printf("ÃÊ±âÈ­ ÇÒ ³­ÀÌµµ ¼±ÅÃ");
+	printf("ì´ˆê¸°í™” í•  ë‚œì´ë„ ì„ íƒ");
 	gotoxy(30, 9);
-	printf("[1] - ½¬¿ò");
+	printf("[1] - ì‰¬ì›€");
 	gotoxy(30, 10);
-	printf("[2] - º¸Åë");
+	printf("[2] - ë³´í†µ");
 	gotoxy(30, 11);
-	printf("[3] - ¾î·Á¿ò");
+	printf("[3] - ì–´ë ¤ì›€");
 	gotoxy(30, 12);
-	printf("[4] - ÀüÃ¼ ÃÊ±âÈ­");
+	printf("[4] - ì „ì²´ ì´ˆê¸°í™”");
 	gotoxy(22, 14);
-	printf("ESC¸¦ ´©¸£¸é ¸Ş´º·Î µ¹¾Æ°©´Ï´Ù.");
+	printf("ESCë¥¼ ëˆ„ë¥´ë©´ ë©”ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.");
 
 	reset = _getch();
 	system("cls");
@@ -592,9 +592,9 @@ void Highest_Score_Reset() {
 	{
 	case '1':
 		gotoxy(16, 9);
-		printf("Á¤¸»·Î ½¬¿ò ³­ÀÌµµÀÇ ÃÖ°í Á¡¼ö¸¦ ÃÊ±âÈ­ ÇÏ½Ã°Ú½À´Ï±î?");
+		printf("ì •ë§ë¡œ ì‰¬ì›€ ë‚œì´ë„ì˜ ìµœê³  ì ìˆ˜ë¥¼ ì´ˆê¸°í™” í•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
 		gotoxy(26, 11);
-		printf("1 - ÃÊ±âÈ­  /  2 - Ãë¼Ò\n");
+		printf("1 - ì´ˆê¸°í™”  /  2 - ì·¨ì†Œ\n");
 
 		reset = _getch();
 
@@ -602,16 +602,16 @@ void Highest_Score_Reset() {
 			system("cls");
 			highest_score[0] = 0;
 			gotoxy(21, 9);
-			printf("ÃÖ°í Á¡¼ö°¡ 0Á¡ À¸·Î ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù");
+			printf("ìµœê³  ì ìˆ˜ê°€ 0ì  ìœ¼ë¡œ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤");
 			Sleep(2500);
 		}
 		system("cls");
 		break;
 	case '2':
 		gotoxy(16, 9);
-		printf("Á¤¸»·Î º¸Åë ³­ÀÌµµÀÇ ÃÖ°í Á¡¼ö¸¦ ÃÊ±âÈ­ ÇÏ½Ã°Ú½À´Ï±î?");
+		printf("ì •ë§ë¡œ ë³´í†µ ë‚œì´ë„ì˜ ìµœê³  ì ìˆ˜ë¥¼ ì´ˆê¸°í™” í•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
 		gotoxy(26, 11);
-		printf("1 - ÃÊ±âÈ­  /  2 - Ãë¼Ò\n");
+		printf("1 - ì´ˆê¸°í™”  /  2 - ì·¨ì†Œ\n");
 
 		reset = _getch();
 
@@ -619,7 +619,7 @@ void Highest_Score_Reset() {
 			system("cls");
 			highest_score[1] = 0;
 			gotoxy(21, 9);
-			printf("ÃÖ°í Á¡¼ö°¡ 0Á¡ À¸·Î ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù");
+			printf("ìµœê³  ì ìˆ˜ê°€ 0ì  ìœ¼ë¡œ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤");
 			Sleep(2500);
 		}
 		system("cls");
@@ -627,9 +627,9 @@ void Highest_Score_Reset() {
 
 	case '3':
 		gotoxy(12, 9);
-		printf("Á¤¸»·Î ¾î·Á¿ò ³­ÀÌµµÀÇ ÃÖ°í Á¡¼ö¸¦ ÃÊ±âÈ­ ÇÏ½Ã°Ú½À´Ï±î?");
+		printf("ì •ë§ë¡œ ì–´ë ¤ì›€ ë‚œì´ë„ì˜ ìµœê³  ì ìˆ˜ë¥¼ ì´ˆê¸°í™” í•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
 		gotoxy(26, 11);
-		printf("1 - ÃÊ±âÈ­  /  2 - Ãë¼Ò\n");
+		printf("1 - ì´ˆê¸°í™”  /  2 - ì·¨ì†Œ\n");
 
 		reset = _getch();
 
@@ -637,7 +637,7 @@ void Highest_Score_Reset() {
 			system("cls");
 			highest_score[2] = 0;
 			gotoxy(21, 9);
-			printf("ÃÖ°í Á¡¼ö°¡ 0Á¡ À¸·Î ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù");
+			printf("ìµœê³  ì ìˆ˜ê°€ 0ì  ìœ¼ë¡œ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤");
 			Sleep(2500);
 		}
 		system("cls");
@@ -645,9 +645,9 @@ void Highest_Score_Reset() {
 
 	case '4':
 		gotoxy(16, 9);
-		printf("Á¤¸»·Î ¸ğµç ³­ÀÌµµÀÇ ÃÖ°í Á¡¼ö¸¦ ÃÊ±âÈ­ ÇÏ½Ã°Ú½À´Ï±î?");
+		printf("ì •ë§ë¡œ ëª¨ë“  ë‚œì´ë„ì˜ ìµœê³  ì ìˆ˜ë¥¼ ì´ˆê¸°í™” í•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
 		gotoxy(26, 11);
-		printf("1 - ÃÊ±âÈ­  /  2 - Ãë¼Ò\n");
+		printf("1 - ì´ˆê¸°í™”  /  2 - ì·¨ì†Œ\n");
 
 		reset = _getch();
 
@@ -656,7 +656,7 @@ void Highest_Score_Reset() {
 			for (i = 0; i < 3; i++)
 				highest_score[i] = 0;
 			gotoxy(21, 9);
-			printf("ÃÖ°í Á¡¼ö°¡ 0Á¡ À¸·Î ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù");
+			printf("ìµœê³  ì ìˆ˜ê°€ 0ì  ìœ¼ë¡œ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤");
 			Sleep(2500);
 		}
 		system("cls");
@@ -668,44 +668,44 @@ void Highest_Score_Reset() {
 }
 
 
-//¼ıÀÚ ¾ß±¸ °ÔÀÓ ¸ŞÀÎ ÇÔ¼ö		¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú
+//ìˆ«ì ì•¼êµ¬ ê²Œì„ ë©”ì¸ í•¨ìˆ˜		â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…
 void Number_Baseball(int selected_level) {
 
-	int random_unit;	//·£´ı¼ıÀÚ »ı¼º
+	int random_unit;	//ëœë¤ìˆ«ì ìƒì„±
 
-	// ¼ıÀÚ¾ß±¸ ½ÇÇà
+	// ìˆ«ìì•¼êµ¬ ì‹¤í–‰
 	srand((unsigned)time(0));
 	switch (selected_level)
 	{
-	case 1: // ½¬¿ò - 3ÀÚ¸®
-		//ÃÊ±âÈ­
+	case 1: // ì‰¬ì›€ - 3ìë¦¬
+		//ì´ˆê¸°í™”
 		Reset();
 
-		// ³­ÀÌµµ ¼¼ÆÃ
+		// ë‚œì´ë„ ì„¸íŒ…
 		level = 3;
 		chance = 7;
 
 
-		// ¹®Á¦ »ı¼º
+		// ë¬¸ì œ ìƒì„±
 		while (1) {
 			random_unit = rand() % 10;
 			no_overlap[random_unit]++;
-			//Áßº¹ Á¦°Å
+			//ì¤‘ë³µ ì œê±°
 			if (no_overlap[random_unit] <= 1) {
 				Com_number[idx] = Int_to_Char(random_unit);
 				idx++;
 			}
-			//Á¤´ä ¼ıÀÚ »ı¼º
+			//ì •ë‹µ ìˆ«ì ìƒì„±
 			if (idx == level)
 				break;
 		}
 
-		// °ÔÀÓ ½ÃÀÛ
+		// ê²Œì„ ì‹œì‘
 		turn_log = 0;
 		do {
-			//ÇöÈ²ÆÇ Ãâ·Â
+			//í˜„í™©íŒ ì¶œë ¥
 
-			//Á¤´ä È®ÀÎ
+			//ì •ë‹µ í™•ì¸
 			/*
 			gotoxy(70, 23);
 			for (i=0;i<level;i++)
@@ -714,7 +714,7 @@ void Number_Baseball(int selected_level) {
 
 			gotoxy(1, 1);
 			Score_board();
-			//ÅÏº° °á°ú
+			//í„´ë³„ ê²°ê³¼
 			switch (turn) {
 			case 1:
 				break;
@@ -731,15 +731,15 @@ void Number_Baseball(int selected_level) {
 			x = 35;
 			y = 8;
 
-			//»ç¿ëÀÚ ¼ıÀÚ ÀÔ·Â
+			//ì‚¬ìš©ì ìˆ«ì ì…ë ¥
 			gotoxy(x, y);
-			printf("¼ıÀÚ %dÀÚ¸® ÀÔ·Â : ", level); // ¹®ÀÚ¿­ ±æÀÌ : 18
+			printf("ìˆ«ì %dìë¦¬ ì…ë ¥ : ", level); // ë¬¸ìì—´ ê¸¸ì´ : 18
 			game_log[turn_log][0] = Get_user_number(x + 18, y);
 			Input_user_number(selected_level, game_log[turn_log][0]);
 			get_num++;
 
 
-			//SBO ÆÇ´Ü, Á¡¼ö°è»ê
+			//SBO íŒë‹¨, ì ìˆ˜ê³„ì‚°
 			Strike = 0;
 			Ball = 0;
 			Out = 0;
@@ -747,7 +747,7 @@ void Number_Baseball(int selected_level) {
 			do
 			{
 				if (Int_in_list(User_number[turn_log][i]) == TRUE) {
-					//ÀÌ ´Ü°è·Î µé¾î¿À¸é, ÀÔ·Â ¼ıÀÚ´Â Á¤´ä¼ıÀÚ¿¡ Æ÷ÇÔÀÌ µÇ¾î ÀÖÀ¸¹Ç·Î ÀÚ¸´¼ö¸¦ ºñ±³ÇÏ¿© S¿Í BÀ» ÆÇ´Ü.
+					//ì´ ë‹¨ê³„ë¡œ ë“¤ì–´ì˜¤ë©´, ì…ë ¥ ìˆ«ìëŠ” ì •ë‹µìˆ«ìì— í¬í•¨ì´ ë˜ì–´ ìˆìœ¼ë¯€ë¡œ ìë¦¿ìˆ˜ë¥¼ ë¹„êµí•˜ì—¬ Sì™€ Bì„ íŒë‹¨.
 
 					//Strike
 					if (User_number[turn_log][i] == Com_number[i]) {
@@ -780,7 +780,7 @@ void Number_Baseball(int selected_level) {
 			} while (User_number[turn_log][i] != NULL);
 
 
-			//Á¤´ä ÆÇº°
+			//ì •ë‹µ íŒë³„
 			if (Check_Correct() == TRUE) {
 				score = Bonus_score(score, chance);
 				if (score > highest_score[0])
@@ -790,7 +790,7 @@ void Number_Baseball(int selected_level) {
 			}
 
 
-			// ÅÏ ¸¶¹«¸®
+			// í„´ ë§ˆë¬´ë¦¬
 			turn++;
 			turn_log++;
 			chance--;
@@ -798,37 +798,37 @@ void Number_Baseball(int selected_level) {
 		} while (chance != 0);
 
 
-		//Á¾·á È­¸é
+		//ì¢…ë£Œ í™”ë©´
 
 		if (Check_Correct() == TRUE) {
-			// ½Â¸®
+			// ìŠ¹ë¦¬
 			gotoxy(36, 5);
-			printf("°ÔÀÓ ½Â¸®");
+			printf("ê²Œì„ ìŠ¹ë¦¬");
 			gotoxy(32, 6);
-			printf("È½¼ö º¸³Ê½º : X %d", chance);
+			printf("íšŸìˆ˜ ë³´ë„ˆìŠ¤ : X %d", chance);
 
 		}
 		else {
-			//ÆĞ¹è
+			//íŒ¨ë°°
 			gotoxy(36, 5);
-			printf("°ÔÀÓ ÆĞ¹è");
+			printf("ê²Œì„ íŒ¨ë°°");
 		}
 
 		gotoxy(33, 8);
-		printf("Á¤´ä : [ ");
+		printf("ì •ë‹µ : [ ");
 		for (i = 0; i < level; i++)
 			printf("%c ", Com_number[i]);
 		printf("]");
 		gotoxy(26, 10);
-		printf("°ÔÀÓÀÌ Á¾·áµÇ¾ú½À´Ï´Ù. (%d Á¡)", score);
+		printf("ê²Œì„ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. (%d ì )", score);
 		gotoxy(27, 12);
-		printf("1 - Àç½ÃÀÛ  /  2 - ¸Ş´º·Î\n");
+		printf("1 - ì¬ì‹œì‘  /  2 - ë©”ë‰´ë¡œ\n");
 
 		Reset();
 
 		game_switch = _getch();
 
-		// 1 - Àç½ÃÀÛ / 2 - ¸Ş´º
+		// 1 - ì¬ì‹œì‘ / 2 - ë©”ë‰´
 		switch (game_switch)
 		{
 		case '1':
@@ -839,35 +839,35 @@ void Number_Baseball(int selected_level) {
 		}
 		break;
 
-	case 2: // º¸Åë - 4ÀÚ¸®
-		//ÃÊ±âÈ­
+	case 2: // ë³´í†µ - 4ìë¦¬
+		//ì´ˆê¸°í™”
 		Reset();
 
-		// ³­ÀÌµµ ¼¼ÆÃ
+		// ë‚œì´ë„ ì„¸íŒ…
 		level = 4;
 		chance = 10;
 
 
-		// ¹®Á¦ »ı¼º
+		// ë¬¸ì œ ìƒì„±
 		while (1) {
 			random_unit = rand() % 10;
 			no_overlap[random_unit]++;
-			//Áßº¹ Á¦°Å
+			//ì¤‘ë³µ ì œê±°
 			if (no_overlap[random_unit] <= 1) {
 				Com_number[idx] = Int_to_Char(random_unit);
 				idx++;
 			}
-			//Á¤´ä ¼ıÀÚ »ı¼º
+			//ì •ë‹µ ìˆ«ì ìƒì„±
 			if (idx == level)
 				break;
 		}
 
-		// °ÔÀÓ ½ÃÀÛ
+		// ê²Œì„ ì‹œì‘
 		turn_log = 0;
 		do {
-			//ÇöÈ²ÆÇ Ãâ·Â
+			//í˜„í™©íŒ ì¶œë ¥
 
-			//Á¤´ä È®ÀÎ
+			//ì •ë‹µ í™•ì¸
 			/*
 			gotoxy(70, 23);
 			for (i = 0; i < level; i++)
@@ -877,7 +877,7 @@ void Number_Baseball(int selected_level) {
 
 			gotoxy(1, 1);
 			Score_board();
-			//ÅÏº° °á°ú
+			//í„´ë³„ ê²°ê³¼
 			switch (turn) {
 			case 1:
 				break;
@@ -894,15 +894,15 @@ void Number_Baseball(int selected_level) {
 			x = 35;
 			y = 8;
 
-			//»ç¿ëÀÚ ¼ıÀÚ ÀÔ·Â
+			//ì‚¬ìš©ì ìˆ«ì ì…ë ¥
 			gotoxy(x, y);
-			printf("¼ıÀÚ %dÀÚ¸® ÀÔ·Â : ", level); // ¹®ÀÚ¿­ ±æÀÌ : 18
+			printf("ìˆ«ì %dìë¦¬ ì…ë ¥ : ", level); // ë¬¸ìì—´ ê¸¸ì´ : 18
 			game_log[turn_log][0] = Get_user_number(x + 18, y);
 			Input_user_number(selected_level, game_log[turn_log][0]);
 			get_num++;
 
 
-			//SBO ÆÇ´Ü, Á¡¼ö°è»ê
+			//SBO íŒë‹¨, ì ìˆ˜ê³„ì‚°
 			Strike = 0;
 			Ball = 0;
 			Out = 0;
@@ -910,7 +910,7 @@ void Number_Baseball(int selected_level) {
 			do
 			{
 				if (Int_in_list(User_number[turn_log][i]) == TRUE) {
-					//ÀÌ ´Ü°è·Î µé¾î¿À¸é, ÀÔ·Â ¼ıÀÚ´Â Á¤´ä¼ıÀÚ¿¡ Æ÷ÇÔÀÌ µÇ¾î ÀÖÀ¸¹Ç·Î ÀÚ¸´¼ö¸¦ ºñ±³ÇÏ¿© S¿Í BÀ» ÆÇ´Ü.
+					//ì´ ë‹¨ê³„ë¡œ ë“¤ì–´ì˜¤ë©´, ì…ë ¥ ìˆ«ìëŠ” ì •ë‹µìˆ«ìì— í¬í•¨ì´ ë˜ì–´ ìˆìœ¼ë¯€ë¡œ ìë¦¿ìˆ˜ë¥¼ ë¹„êµí•˜ì—¬ Sì™€ Bì„ íŒë‹¨.
 
 					//Strike
 					if (User_number[turn_log][i] == Com_number[i]) {
@@ -942,7 +942,7 @@ void Number_Baseball(int selected_level) {
 
 			} while (User_number[turn_log][i] != NULL);
 
-			//Á¤´ä ÆÇº°
+			//ì •ë‹µ íŒë³„
 			if (Check_Correct() == TRUE) {
 				score = Bonus_score(score, chance);
 				if (score > highest_score[1])
@@ -951,7 +951,7 @@ void Number_Baseball(int selected_level) {
 				break;
 			}
 
-			// ÅÏ ¸¶¹«¸®
+			// í„´ ë§ˆë¬´ë¦¬
 			turn++;
 			turn_log++;
 			chance--;
@@ -959,30 +959,30 @@ void Number_Baseball(int selected_level) {
 		} while (chance != 0);
 
 
-		//Á¾·á È­¸é
+		//ì¢…ë£Œ í™”ë©´
 		if (Check_Correct() == TRUE) {
-			// ½Â¸®
+			// ìŠ¹ë¦¬
 			gotoxy(36, 5);
-			printf("°ÔÀÓ ½Â¸®");
+			printf("ê²Œì„ ìŠ¹ë¦¬");
 			gotoxy(32, 6);
-			printf("È½¼ö º¸³Ê½º : X %d", chance);
+			printf("íšŸìˆ˜ ë³´ë„ˆìŠ¤ : X %d", chance);
 
 		}
 		else {
-			//ÆĞ¹è
+			//íŒ¨ë°°
 			gotoxy(36, 5);
-			printf("°ÔÀÓ ÆĞ¹è");
+			printf("ê²Œì„ íŒ¨ë°°");
 		}
 
 		gotoxy(32, 8);
-		printf("Á¤´ä : [ ");
+		printf("ì •ë‹µ : [ ");
 		for (i = 0; i < level; i++)
 			printf("%c ", Com_number[i]);
 		printf("]");
 		gotoxy(26, 10);
-		printf("°ÔÀÓÀÌ Á¾·áµÇ¾ú½À´Ï´Ù. (%d Á¡)", score);
+		printf("ê²Œì„ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. (%d ì )", score);
 		gotoxy(27, 12);
-		printf("1 - Àç½ÃÀÛ  /  2 - ¸Ş´º·Î\n");
+		printf("1 - ì¬ì‹œì‘  /  2 - ë©”ë‰´ë¡œ\n");
 
 		Reset();
 
@@ -997,35 +997,35 @@ void Number_Baseball(int selected_level) {
 		}
 		break;
 
-	case 3: // ¾î·Á¿ò - 5ÀÚ¸®
-		//ÃÊ±âÈ­
+	case 3: // ì–´ë ¤ì›€ - 5ìë¦¬
+		//ì´ˆê¸°í™”
 		Reset();
 
-		// ³­ÀÌµµ ¼¼ÆÃ
+		// ë‚œì´ë„ ì„¸íŒ…
 		level = 5;
 		chance = 15;
 
 
-		// ¹®Á¦ »ı¼º
+		// ë¬¸ì œ ìƒì„±
 		while (1) {
 			random_unit = rand() % 10;
 			no_overlap[random_unit]++;
-			//Áßº¹ Á¦°Å
+			//ì¤‘ë³µ ì œê±°
 			if (no_overlap[random_unit] <= 1) {
 				Com_number[idx] = Int_to_Char(random_unit);
 				idx++;
 			}
-			//Á¤´ä ¼ıÀÚ »ı¼º
+			//ì •ë‹µ ìˆ«ì ìƒì„±
 			if (idx == level)
 				break;
 		}
 
-		// °ÔÀÓ ½ÃÀÛ
+		// ê²Œì„ ì‹œì‘
 		turn_log = 0;
 		do {
-			//ÇöÈ²ÆÇ Ãâ·Â
+			//í˜„í™©íŒ ì¶œë ¥
 
-			//Á¤´ä È®ÀÎ
+			//ì •ë‹µ í™•ì¸
 			/*
 			gotoxy(70, 23);
 			for (i=0;i<level;i++)
@@ -1035,7 +1035,7 @@ void Number_Baseball(int selected_level) {
 
 			gotoxy(1, 1);
 			Score_board();
-			//ÅÏº° °á°ú
+			//í„´ë³„ ê²°ê³¼
 			switch (turn) {
 			case 1:
 				break;
@@ -1052,15 +1052,15 @@ void Number_Baseball(int selected_level) {
 			x = 35;
 			y = 8;
 
-			//»ç¿ëÀÚ ¼ıÀÚ ÀÔ·Â
+			//ì‚¬ìš©ì ìˆ«ì ì…ë ¥
 			gotoxy(x, y);
-			printf("¼ıÀÚ %dÀÚ¸® ÀÔ·Â : ", level); // ¹®ÀÚ¿­ ±æÀÌ : 18
+			printf("ìˆ«ì %dìë¦¬ ì…ë ¥ : ", level); // ë¬¸ìì—´ ê¸¸ì´ : 18
 			game_log[turn_log][0] = Get_user_number(x + 18, y);
 			Input_user_number(selected_level, game_log[turn_log][0]);
 			get_num++;
 
 
-			//SBO ÆÇ´Ü, Á¡¼ö°è»ê
+			//SBO íŒë‹¨, ì ìˆ˜ê³„ì‚°
 			Strike = 0;
 			Ball = 0;
 			Out = 0;
@@ -1068,7 +1068,7 @@ void Number_Baseball(int selected_level) {
 			do
 			{
 				if (Int_in_list(User_number[turn_log][i]) == TRUE) {
-					//ÀÌ ´Ü°è·Î µé¾î¿À¸é, ÀÔ·Â ¼ıÀÚ´Â Á¤´ä¼ıÀÚ¿¡ Æ÷ÇÔÀÌ µÇ¾î ÀÖÀ¸¹Ç·Î ÀÚ¸´¼ö¸¦ ºñ±³ÇÏ¿© S¿Í BÀ» ÆÇ´Ü.
+					//ì´ ë‹¨ê³„ë¡œ ë“¤ì–´ì˜¤ë©´, ì…ë ¥ ìˆ«ìëŠ” ì •ë‹µìˆ«ìì— í¬í•¨ì´ ë˜ì–´ ìˆìœ¼ë¯€ë¡œ ìë¦¿ìˆ˜ë¥¼ ë¹„êµí•˜ì—¬ Sì™€ Bì„ íŒë‹¨.
 
 					//Strike
 					if (User_number[turn_log][i] == Com_number[i]) {
@@ -1100,7 +1100,7 @@ void Number_Baseball(int selected_level) {
 
 			} while (User_number[turn_log][i] != NULL);
 
-			//Á¤´ä ÆÇº°
+			//ì •ë‹µ íŒë³„
 			if (Check_Correct() == TRUE) {
 				score = Bonus_score(score, chance);
 				if (score > highest_score[2])
@@ -1109,7 +1109,7 @@ void Number_Baseball(int selected_level) {
 				break;
 			}
 
-			// ÅÏ ¸¶¹«¸®
+			// í„´ ë§ˆë¬´ë¦¬
 			turn++;
 			turn_log++;
 			chance--;
@@ -1117,30 +1117,30 @@ void Number_Baseball(int selected_level) {
 		} while (chance != 0);
 
 
-		//Á¾·á È­¸é
+		//ì¢…ë£Œ í™”ë©´
 		if (Check_Correct() == TRUE) {
-			// ½Â¸®
+			// ìŠ¹ë¦¬
 			gotoxy(36, 5);
-			printf("°ÔÀÓ ½Â¸®");
+			printf("ê²Œì„ ìŠ¹ë¦¬");
 			gotoxy(32, 6);
-			printf("È½¼ö º¸³Ê½º : X %d", chance);
+			printf("íšŸìˆ˜ ë³´ë„ˆìŠ¤ : X %d", chance);
 
 		}
 		else {
-			//ÆĞ¹è
+			//íŒ¨ë°°
 			gotoxy(36, 5);
-			printf("°ÔÀÓ ÆĞ¹è");
+			printf("ê²Œì„ íŒ¨ë°°");
 		}
 
 		gotoxy(30, 8);
-		printf("Á¤´ä : [ ");
+		printf("ì •ë‹µ : [ ");
 		for (i = 0; i < level; i++)
 			printf("%c ", Com_number[i]);
 		printf("]");
 		gotoxy(26, 10);
-		printf("°ÔÀÓÀÌ Á¾·áµÇ¾ú½À´Ï´Ù. (%d Á¡)", score);
+		printf("ê²Œì„ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. (%d ì )", score);
 		gotoxy(27, 12);
-		printf("1 - Àç½ÃÀÛ  /  2 - ¸Ş´º·Î\n");
+		printf("1 - ì¬ì‹œì‘  /  2 - ë©”ë‰´ë¡œ\n");
 
 		Reset();
 
@@ -1160,38 +1160,38 @@ void Number_Baseball(int selected_level) {
 
 	system("cls");
 }
-//¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú¡Ú
+//â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…â˜…
 
-//°ÔÀÓ ¸Ş´º    ¡Ü
+//ê²Œì„ ë©”ë‰´    â—
 void Menu(int title) {
 	switch (title) {
-	case 1:		//°ÔÀÓ ½ÃÀÛ
-		Number_Baseball(Select_Level());  //¼±ÅÃµÈ ·¹º§(³­ÀÌµµ)¿¡ µû¶ó °¢±â ´Ù¸¥ ¼ıÀÚ ¾ß±¸ ¾Ë°í¸®ÁòÀ» ½ÇÇà.
+	case 1:		//ê²Œì„ ì‹œì‘
+		Number_Baseball(Select_Level());  //ì„ íƒëœ ë ˆë²¨(ë‚œì´ë„)ì— ë”°ë¼ ê°ê¸° ë‹¤ë¥¸ ìˆ«ì ì•¼êµ¬ ì•Œê³ ë¦¬ì¦˜ì„ ì‹¤í–‰.
 		break;
 
-	case 2:		//°ÔÀÓ ¹æ¹ı
-		Game_Explain();  //°ÔÀÓ ¼³¸í  ¡Ü
+	case 2:		//ê²Œì„ ë°©ë²•
+		Game_Explain();  //ê²Œì„ ì„¤ëª…  â—
 		break;
 
-	case 3:		//ÃÖ°íÁ¡¼ö È®ÀÎ
+	case 3:		//ìµœê³ ì ìˆ˜ í™•ì¸
 		system("cls");
 		gotoxy(31, 8);
-		printf(" ½¬¿ò    : %dÁ¡", highest_score[0]);
+		printf(" ì‰¬ì›€    : %dì ", highest_score[0]);
 		gotoxy(31, 9);
-		printf(" º¸Åë    : %dÁ¡", highest_score[1]);
+		printf(" ë³´í†µ    : %dì ", highest_score[1]);
 		gotoxy(31, 10);
-		printf("¾î·Á¿ò   : %dÁ¡", highest_score[2]);
+		printf("ì–´ë ¤ì›€   : %dì ", highest_score[2]);
 		gotoxy(30, 11);
 		printf("====================");
 		gotoxy(30, 12);
-		printf("  Á¡¼ö ÃÊ±âÈ­ : C");
+		printf("  ì ìˆ˜ ì´ˆê¸°í™” : C");
 		gotoxy(30, 13);
-		printf("  ¸Ş´º ´İ±â : Esc");
+		printf("  ë©”ë‰´ ë‹«ê¸° : Esc");
 
 		reset = _getch();
 		system("cls");
 
-		//ÃÖ°í Á¡¼ö ÃÊ±âÈ­ ¿©ºÎ °áÁ¤  (c,C => ÃÊ±âÈ­, else => ¸Ş´ºº¹±Í)
+		//ìµœê³  ì ìˆ˜ ì´ˆê¸°í™” ì—¬ë¶€ ê²°ì •  (c,C => ì´ˆê¸°í™”, else => ë©”ë‰´ë³µê·€)
 		switch (reset) {
 		case 'c': //c
 		case 'C': //C
@@ -1201,12 +1201,12 @@ void Menu(int title) {
 		}
 		break;
 
-	case 4:		//°ÔÀÓ Á¾·á
+	case 4:		//ê²Œì„ ì¢…ë£Œ
 		system("cls");
 		gotoxy(27, 9);
-		printf("°ÔÀÓÀ» Á¾·á ÇÏ½Ã°Ú½À´Ï±î?");
+		printf("ê²Œì„ì„ ì¢…ë£Œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?");
 		gotoxy(28, 11);
-		printf("1 - Á¾·á  /  2 - Ãë¼Ò\n");
+		printf("1 - ì¢…ë£Œ  /  2 - ì·¨ì†Œ\n");
 
 		game_switch = _getch();
 
@@ -1220,13 +1220,13 @@ void Menu(int title) {
 }
 
 
-//¸ŞÀÎ ÇÔ¼ö
+//ë©”ì¸ í•¨ìˆ˜
 int main(void) {
 	int x = 0;
 
 	do {
 		game_switch = NULL;
-		//¸ŞÀÎÈ­¸é¿¡¼­ ¼±ÅÃÇÑ °ªÀ» Menu()¿¡ ÀÎ¼ö·Î ³Ñ±â°í, ÀÎ¼ö¸¦ ¹ŞÀº Menu()ÇÔ¼ö´Â ÀÎ¼ö¿¡ ¸Â´Â ¸Ş´º¸¦ ½ÇÇà½ÃÅ²´Ù.
+		//ë©”ì¸í™”ë©´ì—ì„œ ì„ íƒí•œ ê°’ì„ Menu()ì— ì¸ìˆ˜ë¡œ ë„˜ê¸°ê³ , ì¸ìˆ˜ë¥¼ ë°›ì€ Menu()í•¨ìˆ˜ëŠ” ì¸ìˆ˜ì— ë§ëŠ” ë©”ë‰´ë¥¼ ì‹¤í–‰ì‹œí‚¨ë‹¤.
 		Menu(Title());
 
 	} while (game_switch != 4);
