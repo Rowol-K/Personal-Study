@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Numeric Baseball Refactoring/Numeric Baseball Refactoring.vcxproj" Id="f5e40d96-89a3-42af-9287-e5bd5cd97a6d" />
+</Solution>
