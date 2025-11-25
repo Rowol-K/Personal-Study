@@ -1,0 +1,10 @@
+# 비주얼 스튜디오 임시 파일 무시
+.vs/
+x64/
+Debug/
+Release/
+*.user
+*.suo
+*.db
+*.pdb
+*.obj
