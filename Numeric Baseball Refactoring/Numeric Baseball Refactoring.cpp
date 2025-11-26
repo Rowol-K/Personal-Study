@@ -2,6 +2,8 @@
 // 제목 : 객체지향 기반 숫자야구 게임 (Refactored for Portfolio)
 //=================================================================
 
+#include "Network Manager.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -307,7 +309,37 @@ public:
 };
 
 int main() {
+    cout << "== 숫자야구 서버 시작 ==" << endl;
+
+    // 1. 매니저 생성 (이때 생성자가 실행되면서 WinSock이 켜짐)
+    NetworkManager netMgr;
+
+    // 2. 서버 소켓 만들기 시도
+    if (!netMgr.InitServer()) {
+        cout << "서버를 시작할 수 없습니다." << endl;
+        return -1;
+    }
+    cout << "=== 서버 준비 단계 완료 (대기 중...) ===" << endl;
+
+    // 3. 번호표 붙이기 (포트할당:9000)
+    if (!netMgr.Bind(9000)) {
+        cout << "해당 포트에 연결할 수 없습니다. 다른 포트로 시도해주세요" << endl;
+        return -1;
+    }
+
+    // 4. Listen 호출 (응답대기)
+    if (!netMgr.StartListen(5)) { // 5명까지 대기열 허용
+        return -1;
+    }
+    cout << "=== 멀티스레드 서버가 활성화되었습니다. 접속을 기다립니다. ===" << endl;
+
+    // 메인 스레드는 오직 '문지기' 역할만 한다.
+    while (true) { netMgr.AcceptClient(); }
+
+    /* 게임 실행 코드
     GameManager game;
     game.run();
+    */
+
     return 0;
 }

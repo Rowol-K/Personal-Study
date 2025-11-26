@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f5e40d96-89a3-42af-9287-e5bd5cd97a6d}</ProjectGuid>
-    <RootNamespace>NumericBaseballRefactoring</RootNamespace>
+    <ProjectGuid>{62e42343-4dad-4a30-8043-bc058e730c9e}</ProjectGuid>
+    <RootNamespace>BaseballClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,12 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Network Manager.cpp" />
-    <ClCompile Include="Numeric Baseball Refactoring.cpp" />
+    <ClCompile Include="BaseballClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\GamePacket.h" />
-    <ClInclude Include="Network Manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

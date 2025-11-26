@@ -3,5 +3,9 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/솔루션 항목/">
+    <File Path="GamePacket.h" />
+  </Folder>
+  <Project Path="BaseballClient/BaseballClient.vcxproj" Id="62e42343-4dad-4a30-8043-bc058e730c9e" />
   <Project Path="Numeric Baseball Refactoring/Numeric Baseball Refactoring.vcxproj" Id="f5e40d96-89a3-42af-9287-e5bd5cd97a6d" />
 </Solution>
