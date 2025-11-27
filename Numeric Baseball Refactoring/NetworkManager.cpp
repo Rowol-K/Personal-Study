@@ -1,8 +1,13 @@
-#include "Network Manager.h"
+#include "NetworkManager.h"
 #include <ws2tcpip.h>
 #include "../GamePacket.h"
 
 using namespace std;
+
+// [중요] 정적 멤버 변수 초기화
+GameEngine NetworkManager::m_gameEngine(DEFAULT_GAME_LEVEL);	// 엔진 (정답수 생성)
+std::vector<SOCKET> NetworkManager::m_clients;		// 접속자 명단
+std::mutex NetworkManager::m_lock;					// 명부 자물쇠
 
 // 생성자 : 프로그램 시작 시, 소켓 초기화 및 자원 할당 (소켓 활성화)
 NetworkManager::NetworkManager() {
@@ -103,14 +108,20 @@ bool NetworkManager::AcceptClient() {
 	char clientIP[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &m_clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
 
-	cout << "System: 새로운 클라이언트가 접속하였습니다. 새로운 스레드를 만듭니다. (IP: " << clientIP << ")" << endl;
+	cout << "[System] 새로운 클라이언트가 접속하였습니다. (IP: " << clientIP << ")" << endl;
+
+	// 접속자 명단에 등록 (Race Condition 방지)
+	{
+		lock_guard<mutex> lock(m_lock); // 자물쇠 잠금 (블록 끝나면 자동 해제)
+		m_clients.push_back(m_clientSocket);
+	}
+	cout << "System: 현재 접속자 수: " << m_clients.size() << "명" << endl;
+
 
 	// ★★★★★ 핵심: 스레드 생성 (멀티스레드 프로그래밍)
 	// std::thread(실행할함수, 인자1, 인자2)
 	thread t(ProcessClient, m_clientSocket, m_clientAddr);
-
-	// detach: "너 알아서 일하고 퇴근해. 난 신경 끈다." (독립시킴)
-	t.detach();
+	t.detach(); // detach: "너 알아서 일하고 퇴근해. 난 신경 끈다." (독립시킴)
 
 	return true;
 }
@@ -131,9 +142,19 @@ void NetworkManager::ProcessClient(SOCKET clientSock, SOCKADDR_IN clientAddr)
 		// 패킷 수신
 		int recvLen = recv(clientSock, buffer, sizeof(buffer), 0);
 
-		// 연결 종료 감지
+		// 연결 종료 감지 (+ 접속자 명단에서 제거)
 		if (recvLen <= 0) {
 			cout << "Client Disconnected: " << clientIP << endl;
+			{
+				lock_guard<mutex> lock(m_lock);
+				for (auto it = m_clients.begin(); it != m_clients.end(); ++it) {
+					if (*it == clientSock) {
+						m_clients.erase(it);
+						break;
+					}
+				}
+			}
+
 			break;
 		}
 
@@ -155,15 +176,57 @@ void NetworkManager::ProcessClient(SOCKET clientSock, SOCKADDR_IN clientAddr)
 			case (PT_LOGIN):
 			{
 				LoginPacket* pkt = (LoginPacket*)header;
-				cout << "[" << clientIP << "] 님이 로그인: " << pkt->name << endl;
+				cout << "[" << pkt->name << "] 님이 로그인 하였습니다. (" << clientIP << ")" << endl;
 				break;
 			}
-			case (PT_GUESS):
+			case (PT_GUESS): // count, numbers[]
 			{
 				GuessPacket* pkt = (GuessPacket*)header;
-				cout << "[" << clientIP << "] 숫자 던짐: ";
-				for (int i = 0; i < pkt->count; ++i) cout << pkt->numbers[i] << " ";
+				cout << "[" << clientIP << "] 유저의 도전: ";
+
+				// 1. 유저가 보낸 숫자 확인
+				vector<int> userGuess;
+				for (int i = 0; i < pkt->count; ++i) {
+					cout << pkt->numbers[i] << " ";
+					userGuess.push_back(pkt->numbers[i]);
+				}
 				cout << endl;
+
+				// 2. ☆ [핵심] 정답 판별 (CalculateResult)
+				// (m_gameEngine은 static 멤버로 선언되어 있어야 함)
+				Result res = m_gameEngine.CalculateResult(userGuess);
+
+				// 3. 결과 패킷 만들기 (성적표 작성)
+				ResultPacket resPkt;
+				resPkt.header.id = PT_RESULT;
+				resPkt.header.size = sizeof(ResultPacket);
+
+				resPkt.strikes = res.strike;
+				resPkt.balls = res.ball;
+				resPkt.out = res.out;
+				resPkt.isWin = res.isWin;
+
+				// 4. 결과 전송 (성적표 발송)
+				if (res.isWin) {
+					// 정답이면 서버 로그에 축하 메시지
+					cout << " [" << clientIP << "] 님이 정답을 맞췄습니다!" << endl;
+					
+					// 브로드캐스팅 (모든 접속자에게 결과 전송)
+					{
+						lock_guard<mutex> lock(m_lock); // 자물쇠 걸고
+						for (SOCKET sock : m_clients) {
+							// 우승자 본인뿐만 아니라 모두에게 보냄
+							send(sock, (char*)&resPkt, sizeof(ResultPacket), 0);
+						}
+					}
+					// (선택) 여기서 게임 리셋?
+					// m_gameEngine.Reset();
+				}
+				else {
+					// 정답 아닐경우, 본인에게만 결과 전송
+					send(clientSock, (char*)&resPkt, sizeof(ResultPacket), 0);
+					cout << "[System] 결과 전송: " << res.strike << "S " << res.ball << "B " << res.out << "O" << endl;
+				}
 				break;
 			}
 			default:

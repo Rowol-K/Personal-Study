@@ -1,8 +1,9 @@
 #pragma once
 
 // 1. 게임 설정 상수 (여기만 고치면 4구, 5구 야구로 확장 가능!)
-const int MAX_GAME_DIGITS = 9; // 최대 9자리까지 지원 (넉넉하게)
-const int NAME_LEN = 20;       // 닉네임 최대 길이
+const int MAX_GAME_DIGITS = 9;      // 최대 9자리까지 지원 (넉넉하게)
+const int DEFAULT_GAME_LEVEL = 4;   // 기본 게임 난이도
+const int NAME_LEN = 20;            // 닉네임 최대 길이
 
 enum PacketID {
     PT_LOGIN = 1,
@@ -36,7 +37,8 @@ struct ResultPacket {
     PacketHeader header;
     int strikes;
     int balls;
-    bool isOut;
+    int out;
+    bool isWin;
 };
 
 #pragma pack(pop)

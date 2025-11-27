@@ -2,17 +2,17 @@
 // 제목 : 객체지향 기반 숫자야구 게임 (Refactored for Portfolio)
 //=================================================================
 
-#include "Network Manager.h"
-
 #include <iostream>
-#include <vector>
-#include <string>
-#include <random>
-#include <algorithm>
-#include <conio.h>
-#include <Windows.h>
+#include "NetworkManager.h"
 
 using namespace std;
+
+// 콘솔 게이밍용 코드 (※서버로서 리팩토링한 파일이므로, 게임 진행은 다른 프로젝트를 통해 진행할 것임)
+/*
+// 정적 멤버 변수 초기화 (여기서 게임 정답이 생성됨!)
+// 프로그램이 시작될 때 GameEngine 생성자가 호출되면서 정답을 만듦
+GameEngine NetworkManager::m_gameEngine;
+
 
 // [Utility] 콘솔 제어용 클래스
 class ConsoleHelper {
@@ -25,61 +25,6 @@ public:
     static void clearScreen() {
         system("cls");
     }
-};
-
-// [Logic] 게임 로직 클래스
-class BaseballGameEngine {
-private:
-    int digitCount;
-    vector<int> targetNumbers;
-    int tryCount;
-
-public:
-    BaseballGameEngine(int level) : digitCount(level), tryCount(0) {}
-
-    void generateNumbers() {
-        targetNumbers.clear();
-        vector<int> candidates = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-        random_device rd;
-        mt19937 g(rd());
-        shuffle(candidates.begin(), candidates.end(), g);
-
-        for (int i = 0; i < digitCount; ++i) {
-            targetNumbers.push_back(candidates[i]);
-        }
-    }
-
-    struct Result {
-        int strike = 0;
-        int ball = 0;
-        int out = 0;
-        bool isWin = false;
-    };
-
-    Result calculateResult(const vector<int>& userNumbers) {
-        Result res;
-        tryCount++;
-
-        for (int i = 0; i < digitCount; ++i) {
-            bool found = false;
-            for (int j = 0; j < digitCount; ++j) {
-                if (userNumbers[i] == targetNumbers[j]) {
-                    if (i == j) res.strike++;
-                    else res.ball++;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) res.out++;
-        }
-
-        if (res.strike == digitCount) res.isWin = true;
-        return res;
-    }
-
-    int getDigitCount() const { return digitCount; }
-    int getTryCount() const { return tryCount; }
 };
 
 // [Validator] 입력 검증 클래스
@@ -103,14 +48,28 @@ public:
 
 // [Manager] 게임 흐름 관리 클래스
 class GameManager {
+public:
+    void run() {
+        while (true) {
+            int menu = showMainMenu();
+            if (menu == 3) break;           // <3> 종료
+            if (menu == 1) {                // <1> 게임 시작
+                int level = selectLevel();
+                playGame(level);
+            }
+            else if (menu == 2) {           // <2> 게임 설명
+                showTutorial();
+            }
+        }
+    }
 private:
-    // 메인 메뉴: 종료를 3번으로 변경
+    // 메인 메뉴
     int showMainMenu() {
         ConsoleHelper::clearScreen();
         ConsoleHelper::gotoXY(30, 5); cout << "== 객체지향 숫자야구 ==";
         ConsoleHelper::gotoXY(30, 7); cout << "1. 게임 시작";
         ConsoleHelper::gotoXY(30, 8); cout << "2. 게임 설명";
-        ConsoleHelper::gotoXY(30, 9); cout << "3. 종료"; // 4 -> 3번으로 변경
+        ConsoleHelper::gotoXY(30, 9); cout << "3. 종료";
         ConsoleHelper::gotoXY(30, 11); cout << "선택: ";
 
         string input;
@@ -147,7 +106,7 @@ private:
         }
     }
 
-    // [수정됨] 페이지 기능이 적용된 게임 설명
+    // 페이지 기능이 적용된 게임 설명
     void showTutorial() {
         vector<string> pages;
         pages.push_back(
@@ -178,6 +137,7 @@ private:
         );
 
         int currentPage = 0;
+
         while (true) {
             ConsoleHelper::clearScreen();
             ConsoleHelper::gotoXY(10, 5);
@@ -243,8 +203,8 @@ private:
     }
 
     void playGame(int level) {
-        BaseballGameEngine engine(level);
-        engine.generateNumbers();
+        GameEngine engine(level);
+        engine.GenerateAnswer();
 
         ConsoleHelper::clearScreen();
         ConsoleHelper::gotoXY(10, 2);
@@ -273,7 +233,7 @@ private:
                 continue;
             }
 
-            auto res = engine.calculateResult(userNumbers);
+            auto res = engine.CalculateResult(userNumbers);
             ConsoleHelper::gotoXY(40, line);
             cout << "Result: " << res.strike << "S " << res.ball << "B " << res.out << "O";
 
@@ -291,22 +251,8 @@ private:
             }
         }
     }
-
-public:
-    void run() {
-        while (true) {
-            int menu = showMainMenu();
-            if (menu == 3) break;
-            if (menu == 1) {
-                int level = selectLevel();
-                playGame(level);
-            }
-            else if (menu == 2) {
-                showTutorial();
-            }
-        }
-    }
 };
+*/
 
 int main() {
     cout << "== 숫자야구 서버 시작 ==" << endl;

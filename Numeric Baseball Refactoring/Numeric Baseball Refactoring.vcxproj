@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Network Manager.cpp" />
-    <ClCompile Include="Numeric Baseball Refactoring.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\GamePacket.h" />
-    <ClInclude Include="Network Manager.h" />
+    <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="NetworkManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

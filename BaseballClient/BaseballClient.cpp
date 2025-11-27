@@ -2,13 +2,83 @@
 //
 
 #include <iostream>
+#include <vector>
+#include <string>
 #include <WinSock2.h>
 #include <WS2tcpip.h> // inet_pton 사용을 위해 필요
+#include <thread>
+
 #include "../GamePacket.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
 using namespace std;
+
+SOCKET hSocket;
+bool inGame = true;
+
+// [Validator] 입력 검증 클래스
+class InputValidator {
+public:
+    static bool parseInput(string input, int digitCount, vector<int>& outNumbers) {
+        outNumbers.clear();
+        if (input.length() != digitCount) return false;
+
+        bool check[10] = { false };
+        for (char c : input) {
+            if (!isdigit(c)) return false;
+            int num = c - '0';
+            if (check[num]) return false; // 중복 체크
+            check[num] = true;
+            outNumbers.push_back(num);
+        }
+        return true;
+    }
+};
+
+// 서버 패킷 수신
+void RecvThread() {
+    while (inGame)
+    {
+        char buffer[1024] = { 0 };
+
+        int recvLen = recv(hSocket, buffer, sizeof(buffer), 0);
+
+        if (recvLen <= 0) {
+            cout << "\n[System] 서버와의 연결이 끊어졌습니다." << endl;
+            inGame = false;
+            break;
+        }
+    
+        // 패킷 처리
+        int processedLen = 0;
+        while (processedLen < recvLen)
+        {
+            PacketHeader* header = (PacketHeader*)&buffer[processedLen];
+
+            // 오버 사이즈의 패킷이 오면 탈출
+            if (processedLen + header->size > recvLen) break;
+
+            if (header->id == PT_RESULT) {
+                ResultPacket* resPkt = (ResultPacket*)header;
+
+                // 메인 함수가 입력 대기상태일 때에도 메시지가 뜰 수 있게 줄바꿔서 출력
+                cout << "\n--------------------------------------------" << endl;
+                cout << "[Server] " << resPkt->strikes << " Strike / " << resPkt->balls << " Ball / " << resPkt->out << " Out" << endl;
+            
+                // 정답 처리
+                if (resPkt->isWin) {
+                    cout << "\n[Server] 정답자가 발생하여 게임이 종료됩니다." << endl;
+                    inGame = false;
+                    Sleep(3000);
+                }
+                cout << "\n--------------------------------------------" << endl;
+                cout << "\n[입력] : ";
+            }
+            processedLen += header->size;
+        }
+    }
+}
 
 int main()
 {
@@ -22,7 +92,7 @@ int main()
     }
 
     // 2. 소켓 생성
-    SOCKET hSocket = socket(AF_INET, SOCK_STREAM, 0);
+    hSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (hSocket == INVALID_SOCKET) {
         cout << "소켓 생성 실패" << endl;
         return -1;
@@ -61,42 +131,79 @@ int main()
     // (char*)&loginPkt : 구조체를 바이트 덩어리로 형변환해서 보냄
     sendResult = send(hSocket, (char*)&loginPkt, sizeof(LoginPacket), 0);
 
-    if (sendResult == SOCKET_ERROR) {
-        cout << "로그인 패킷 전송 실패!" << endl;
+    // 로그인 상태 확인
+    if (sendResult == SOCKET_ERROR) { cout << "로그인 패킷 전송 실패!" << endl; }
+    else { cout << "로그인 요청 전송 완료! (" << sendResult << " bytes)" << endl; }
+
+    // 게임 시작
+    cout << "\n[Client] 게임을 시작합니다! (난이도 : " << DEFAULT_GAME_LEVEL << ")" << endl;
+
+    // 서버 패킷 수신용 스레드 생성
+    thread t(RecvThread);
+    t.detach(); // "너 알아서 들어라, 난 입력받으러 간다"
+
+    // 메인 스레드
+    // 1. 유저 입력 받기
+    cout << "\n[입력] : ";
+    while (inGame) {
+        string input;
+        cin >> input;
+
+        if (!inGame) {
+            cout << "이미 종료된 게임입니다." << endl;
+            break;
+        }
+
+        // 입력 검증 클래스를 활용하여 검증
+        vector<int> userNum;
+        if (!InputValidator::parseInput(input, DEFAULT_GAME_LEVEL, userNum)) {
+            cout << "[Client] 잘못된 입력입니다. (" << DEFAULT_GAME_LEVEL << "자리 중복없는 숫자를 입력하세요.)" << endl;
+            continue; // 다시 입력받기
+        }
+
+        // 2. 패킷 만들기
+        GuessPacket guessPkt;
+        guessPkt.header.id = PT_GUESS;
+        guessPkt.header.size = sizeof(GuessPacket);
+        guessPkt.count = DEFAULT_GAME_LEVEL;
+
+        for (int i = 0; i < DEFAULT_GAME_LEVEL; ++i) {
+            guessPkt.numbers[i] = userNum[i]; // 벡터에서 꺼내 담기
+        }
+
+        // 3. 전송 (Send)
+        send(hSocket, (char*)&guessPkt, sizeof(GuessPacket), 0);
+        Sleep(100);
+
+        // 4. 결과 대기 (Recv) - 해당 부분은 스레드에 전담시켜 동시성을 확보.
+        /*
+        char buffer[1024];
+        int recvLen = recv(hSocket, buffer, sizeof(buffer), 0);
+
+        if (recvLen <= 0) {
+            cout << "서버와 연결이 끊어졌습니다." << endl;
+            break;
+        }
+
+        // 4. 결과 확인
+        PacketHeader* header = (PacketHeader*)buffer;
+        if (header->id == PT_RESULT) {
+            ResultPacket* resPkt = (ResultPacket*)buffer;
+            cout << "[Server] " << resPkt->strikes << " Strike / " << resPkt->balls << " Ball / " << resPkt->out << " Out" << endl;
+
+            // 정답 처리
+            if (resPkt->isWin) {
+                cout << "\n[Server] 정답입니다!! 축하합니다!" << endl;
+                Sleep(3000);
+                break; // 게임 끝! (루프 탈출)
+            }
+        }
+        */
     }
-    else {
-        cout << "로그인 요청 전송 완료! (" << sendResult << " bytes)" << endl;
-    }
-
-    // [시나리오] 유저가 숫자 3개(1, 2, 3)를 입력했다고 가정
-    cout << "\n>>> 숫자 3개를 던집니다! (1, 2, 3) <<<" << endl;
-
-    GuessPacket guessPkt;
-    guessPkt.header.id = PT_GUESS;
-    guessPkt.header.size = sizeof(GuessPacket);
-
-    // ★ 유동적인 부분 설정
-    guessPkt.count = 3; // "나 숫자 3개 채웠어!"
-    guessPkt.numbers[0] = 1;
-    guessPkt.numbers[1] = 2;
-    guessPkt.numbers[2] = 3;
-
-    // (주의: 나머지 numbers[3]~[8]은 쓰레기 값이 들어있어도 상관없음. 서버가 count만큼만 읽을 거니까!)
-
-    sendResult = send(hSocket, (char*)&guessPkt, sizeof(GuessPacket), 0);
-
-    if (sendResult == SOCKET_ERROR) {
-        cout << "숫자 전송 실패!" << endl;
-    }
-    else {
-        cout << "숫자 데이터 전송 완료! (" << sendResult << " bytes)" << endl;
-    }
-
-    // 연결 끊지 않고 대기
-    while (true) {}
 
     closesocket(hSocket);
     WSACleanup();
+    system("pause");
 
     return 0;
 }
