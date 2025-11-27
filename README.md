@@ -1,4 +1,4 @@
-# ⚾ Multiplayer Number Baseball Server (C++ / Winsock2)
+# ⚾ Multiplayer Numeric Baseball Server (C++ / Winsock2)
 
 > **C언어 레거시 코드의 기술적 부채를 청산하고, 고성능 멀티스레드 소켓 서버로 확장한 프로젝트입니다.**
 
